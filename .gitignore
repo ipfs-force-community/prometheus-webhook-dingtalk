@@ -10,3 +10,5 @@ coverage.txt
 
 /web/ui/static/react
 /web/ui/assets_vfsdata.go
+
+/dingtalk

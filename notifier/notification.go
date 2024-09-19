@@ -88,7 +88,35 @@ func (r *DingNotificationBuilder) Build(m *models.WebhookMessage) (*models.DingT
 	return notification, nil
 }
 
-func SendNotification(notification *models.DingTalkNotification, httpClient *http.Client, target *config.Target) (*models.DingTalkNotificationResponse, error) {
+func (r *DingNotificationBuilder) BuildWeChat(m *models.WebhookMessage) (*models.WeChatNotification, error) {
+	if r.target.Mention != nil {
+		m.AtMobiles = append(m.AtMobiles, r.target.Mention.Mobiles...)
+	}
+
+	content, err := r.renderText(m)
+	if err != nil {
+		return nil, err
+	}
+
+	notification := &models.WeChatNotification{
+		MessageType: "markdown",
+		Markdown: &models.WeChatNotificationMarkdown{
+			Content: content,
+		},
+	}
+
+	// Build mention
+	if r.target.Mention != nil {
+		notification.At = &models.DingTalkNotificationAt{
+			IsAtAll:   r.target.Mention.All,
+			AtMobiles: r.target.Mention.Mobiles,
+		}
+	}
+
+	return notification, nil
+}
+
+func SendNotification(notification any, httpClient *http.Client, target *config.Target) (*models.DingTalkNotificationResponse, error) {
 	targetURL := *target.URL
 	// Calculate signature when secret is provided
 	if target.Secret != "" {

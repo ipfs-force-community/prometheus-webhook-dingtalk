@@ -34,16 +34,6 @@ Clone the repository and build manually:
 make build
 ```
 
-### Building the Docker Image
-
-In order to build the docker image locally (linux/amd64), you can use the following commands:
-
-```bash
-make promu
-promu crossbuild -p linux/amd64   #  Or $(go env GOPATH)/bin/promu crossbuild -p linux/amd64
-make common-docker-amd64
-```
-
 ## Usage
 
 ```
