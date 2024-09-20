@@ -96,6 +96,16 @@ targets:
       mobiles: ['156xxxx8827', '189xxxx8325']
 ```
 
+### Alertmanager
+
+```
+receivers:
+  - name: "default_receiver"
+    webhook_configs:
+      - url: "http://localhost:9567/webhook"
+      - url: "http://localhost:8060/dingtalk/webhook1/send"
+```
+
 [Prometheus]: https://prometheus.io
 [AlertManager]: https://github.com/prometheus/alertmanager
 [DingTalk]: https://www.dingtalk.com

@@ -17,8 +17,8 @@
 ## Targets, previously was known as "profiles"
 targets:
   webhook1:
-    url: https://oapi.dingtalk.com/robot/send?access_token=86940410bc5c5a43e7c57f2cea6f1c186bcbc16db87f2a006a7b969aae2bb2b6
+    url: https://oapi.dingtalk.com/robot/send?access_token=86940410bc5c5a43e7c57f2cea6f1c186bcbc16db87f2a00xxxxxx
   webhook2:
-    url: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=d6493921-e728-432b-bf65-560b98a2f275
+    url: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=d6493921-e728-432b-bf65-xxxxxx
   webhook3:
-    url: https://open.larksuite.com/open-apis/bot/v2/hook/a44c7c63-4fd2-4625-87ce-ac4f7c639688
+    url: https://open.larksuite.com/open-apis/bot/v2/hook/a44c7c63-4fd2-4625-87ce-xxxxxx
