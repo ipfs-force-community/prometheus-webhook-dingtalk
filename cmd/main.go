@@ -18,6 +18,7 @@ import (
 
 	"github.com/timonwong/prometheus-webhook-dingtalk/config"
 	"github.com/timonwong/prometheus-webhook-dingtalk/template"
+	version2 "github.com/timonwong/prometheus-webhook-dingtalk/version"
 	"github.com/timonwong/prometheus-webhook-dingtalk/web"
 )
 
@@ -51,12 +52,11 @@ func run() int {
 	promlogConfig := &promlog.Config{}
 	flag.AddFlags(kingpin.CommandLine, promlogConfig)
 
-	kingpin.Version(version.Print("prometheus-webhook-dingtalk"))
+	kingpin.Version("dingtalk: " + version2.UserVersion)
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
 
 	logger := promlog.New(promlogConfig)
-	level.Info(logger).Log("msg", "Starting prometheus-webhook-dingtalk", "version", version.Info())
 	level.Info(logger).Log("msg", "Build context", version.BuildContext())
 
 	flagsMap := map[string]string{}
