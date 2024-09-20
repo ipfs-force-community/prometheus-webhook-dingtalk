@@ -92,28 +92,7 @@ func run() int {
 
 	configLogger := log.With(logger, "component", "configuration")
 	configCoordinator := config.NewCoordinator(*configFile, configLogger)
-	configCoordinator.Subscribe(func(conf *config.Config) error {
-		// Parse templates
-		level.Info(configLogger).Log("msg", "Loading templates", "templates", strings.Join(conf.Templates, ";"))
-		tmpl, err := template.FromGlobs(!conf.NoBuiltinTemplate, conf.Templates...)
-		if err != nil {
-			return fmt.Errorf("failed to parse templates: %w", err)
-		}
-
-		// Print current targets configuration
-		host, port, _ := net.SplitHostPort(*listenAddress)
-		if host == "" {
-			host = "localhost"
-		}
-
-		var paths []string
-		for name := range conf.Targets {
-			paths = append(paths, fmt.Sprintf("http://%s:%s/dingtalk/%s/send", host, port, name))
-		}
-		configLogger.Log("msg", "Webhook urls for prometheus alertmanager", "urls", strings.Join(paths, " "))
-
-		return webHandler.ApplyConfig(conf, tmpl)
-	})
+	configCoordinator.Subscribe(subscribe(webHandler, configLogger, listenAddress))
 
 	if err := configCoordinator.Reload(); err != nil {
 		return 1
@@ -175,5 +154,37 @@ func run() int {
 
 			return 0
 		}
+	}
+}
+
+func subscribe(webHandler *web.Handler,
+	configLogger log.Logger,
+	listenAddress *string,
+) func(conf *config.Config) error {
+	return func(conf *config.Config) error {
+		// Parse templates
+		level.Info(configLogger).Log("msg", "Loading templates", "templates", strings.Join(conf.Templates, ";"))
+		tmpl, err := template.FromGlobs(!conf.NoBuiltinTemplate, conf.Templates...)
+		if err != nil {
+			return fmt.Errorf("failed to parse templates: %w", err)
+		}
+
+		// Print current targets configuration
+		host, port, _ := net.SplitHostPort(*listenAddress)
+		if host == "" {
+			host = "localhost"
+		}
+
+		var paths []string
+		for name, target := range conf.Targets {
+			if strings.Contains(target.URL.String(), "qyapi.weixin.qq.com") {
+				paths = append(paths, fmt.Sprintf("http://%s:%s/wechat/%s/send", host, port, name))
+				continue
+			}
+			paths = append(paths, fmt.Sprintf("http://%s:%s/dingtalk/%s/send", host, port, name))
+		}
+		configLogger.Log("msg", "Webhook urls for prometheus alertmanager", "urls", strings.Join(paths, " "))
+
+		return webHandler.ApplyConfig(conf, tmpl)
 	}
 }

@@ -1,6 +1,6 @@
 module github.com/timonwong/prometheus-webhook-dingtalk
 
-go 1.18
+go 1.21
 
 require (
 	github.com/Masterminds/sprig/v3 v3.2.2
@@ -11,6 +11,11 @@ require (
 	go.uber.org/atomic v1.9.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/yaml.v2 v2.4.0
+)
+
+require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 )
 
 require (
@@ -34,6 +39,7 @@ require (
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
+	github.com/test-go/testify v1.1.4
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect

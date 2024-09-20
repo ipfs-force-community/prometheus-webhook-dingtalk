@@ -50,3 +50,18 @@ type DingTalkNotificationButton struct {
 	Title     string `json:"title"`
 	ActionURL string `json:"actionURL"`
 }
+
+////////// wechat ////////////
+
+type WeChatNotification struct {
+	MessageType string                          `json:"msgtype"`
+	Text        *DingTalkNotificationText       `json:"text,omitempty"`
+	Link        *DingTalkNotificationLink       `json:"link,omitempty"`
+	Markdown    *WeChatNotificationMarkdown     `json:"markdown,omitempty"`
+	ActionCard  *DingTalkNotificationActionCard `json:"actionCard,omitempty"`
+	At          *DingTalkNotificationAt         `json:"at,omitempty"`
+}
+
+type WeChatNotificationMarkdown struct {
+	Content string `json:"content"`
+}

@@ -17,23 +17,6 @@
 ## Targets, previously was known as "profiles"
 targets:
   webhook1:
-    url: https://oapi.dingtalk.com/robot/send?access_token=xxxxxxxxxxxx
-    # secret for signature
-    secret: SEC000000000000000000000
+    url: https://oapi.dingtalk.com/robot/send?access_token=86940410bc5c5a43e7c57f2cea6f1c186bcbc16db87f2a006a7b969aae2bb2b6
   webhook2:
-    url: https://oapi.dingtalk.com/robot/send?access_token=xxxxxxxxxxxx
-  webhook_legacy:
-    url: https://oapi.dingtalk.com/robot/send?access_token=xxxxxxxxxxxx
-    # Customize template content
-    message:
-      # Use legacy template
-      title: '{{ template "legacy.title" . }}'
-      text: '{{ template "legacy.content" . }}'
-  webhook_mention_all:
-    url: https://oapi.dingtalk.com/robot/send?access_token=xxxxxxxxxxxx
-    mention:
-      all: true
-  webhook_mention_users:
-    url: https://oapi.dingtalk.com/robot/send?access_token=xxxxxxxxxxxx
-    mention:
-      mobiles: ['156xxxx8827', '189xxxx8325']
+    url: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=d6493921-e728-432b-bf65-560b98a2f275

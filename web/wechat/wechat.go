@@ -1,4 +1,4 @@
-package dingtalk
+package wechat
 
 import (
 	"encoding/json"
@@ -42,13 +42,15 @@ func (api *API) Update(conf *config.Config, tmpl *template.Template) {
 
 	api.conf = conf
 	api.tmpl = tmpl
+
 	tmp := make(map[string]config.Target)
 	for k, v := range conf.Targets {
-		if strings.Contains(v.URL.Host, "oapi.dingtalk.com") {
+		if strings.Contains(v.URL.Host, "qyapi.weixin.qq.com") {
 			tmp[k] = v
 		}
 	}
-	api.targets = conf.Targets
+	api.targets = tmp
+
 	api.httpClient = &http.Client{
 		Transport: &http.Transport{
 			Proxy:             http.ProxyFromEnvironment,
@@ -92,7 +94,7 @@ func (api *API) serveSend(w http.ResponseWriter, r *http.Request) {
 	}
 
 	builder := notifier.NewDingNotificationBuilder(tmpl, conf, &target)
-	notification, err := builder.Build(&promMessage)
+	notification, err := builder.BuildWeChat(&promMessage)
 	if err != nil {
 		level.Error(logger).Log("msg", "Failed to build notification", "err", err)
 		http.Error(w, "Bad Request", http.StatusBadRequest)

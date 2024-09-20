@@ -39,6 +39,7 @@ import (
 	"github.com/timonwong/prometheus-webhook-dingtalk/web/apiv1"
 	"github.com/timonwong/prometheus-webhook-dingtalk/web/dingtalk"
 	"github.com/timonwong/prometheus-webhook-dingtalk/web/ui"
+	"github.com/timonwong/prometheus-webhook-dingtalk/web/wechat"
 )
 
 // Paths that are handled by the React / Reach router that should all be served the main React app's index.html.
@@ -67,6 +68,7 @@ type Handler struct {
 
 	apiV1    *apiv1.API
 	dingTalk *dingtalk.API
+	weChat   *wechat.API
 
 	router      chi.Router
 	reloadCh    chan chan error
@@ -120,8 +122,10 @@ func New(logger log.Logger, o *Options) *Handler {
 		h.runtimeInfo,
 	)
 	h.dingTalk = dingtalk.NewAPI(logger)
+	h.weChat = wechat.NewAPI(logger)
 
 	router.Mount("/dingtalk", h.dingTalk.Routes())
+	router.Mount("/wechat", h.weChat.Routes())
 
 	if o.EnableLifecycle {
 		router.Post("/-/reload", h.reload)
@@ -200,6 +204,7 @@ func (h *Handler) ApplyConfig(conf *config.Config, tmpl *template.Template) erro
 	h.config = conf
 	h.tmpl = tmpl
 	h.dingTalk.Update(conf, tmpl)
+	h.weChat.Update(conf, tmpl)
 	return nil
 }
 
