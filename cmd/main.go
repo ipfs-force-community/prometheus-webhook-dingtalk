@@ -181,6 +181,10 @@ func subscribe(webHandler *web.Handler,
 				paths = append(paths, fmt.Sprintf("http://%s:%s/wechat/%s/send", host, port, name))
 				continue
 			}
+			if strings.Contains(target.URL.String(), "open.larksuite.com") {
+				paths = append(paths, fmt.Sprintf("http://%s:%s/lark/%s/send", host, port, name))
+				continue
+			}
 			paths = append(paths, fmt.Sprintf("http://%s:%s/dingtalk/%s/send", host, port, name))
 		}
 		configLogger.Log("msg", "Webhook urls for prometheus alertmanager", "urls", strings.Join(paths, " "))

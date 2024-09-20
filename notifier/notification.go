@@ -116,6 +116,39 @@ func (r *DingNotificationBuilder) BuildWeChat(m *models.WebhookMessage) (*models
 	return notification, nil
 }
 
+func (r *DingNotificationBuilder) BuildLark(m *models.WebhookMessage) (*models.LarkNotification, error) {
+	if r.target.Mention != nil {
+		m.AtMobiles = append(m.AtMobiles, r.target.Mention.Mobiles...)
+	}
+
+	content, err := r.renderText(m)
+	if err != nil {
+		return nil, err
+	}
+
+	notification := &models.LarkNotification{
+		MessageType: "interactive",
+		Card: models.LarkNotificationCard{
+			Elements: []models.LarkNotificationElement{
+				{
+					Tag:     "markdown",
+					Content: content,
+				},
+			},
+		},
+	}
+
+	// Build mention
+	if r.target.Mention != nil {
+		notification.At = &models.DingTalkNotificationAt{
+			IsAtAll:   r.target.Mention.All,
+			AtMobiles: r.target.Mention.Mobiles,
+		}
+	}
+
+	return notification, nil
+}
+
 func SendNotification(notification any, httpClient *http.Client, target *config.Target) (*models.DingTalkNotificationResponse, error) {
 	targetURL := *target.URL
 	// Calculate signature when secret is provided

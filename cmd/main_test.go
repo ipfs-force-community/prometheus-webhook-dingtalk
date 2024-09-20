@@ -13,8 +13,11 @@ import (
 
 func TestSend(t *testing.T) {
 	t.SkipNow()
-	// urls := []string{"http://localhost:8060/dingtalk/webhook1/send", "http://localhost:8060/wechat/webhook2/send"}
-	urls := []string{"http://localhost:8060/wechat/webhook2/send"}
+	urls := []string{
+		"http://localhost:8060/dingtalk/webhook1/send",
+		"http://localhost:8060/wechat/webhook2/send",
+		"http://localhost:8060/lark/webhook3/send",
+	}
 	cli := http.DefaultClient
 	reqData, err := os.ReadFile("./test_data.json")
 	assert.NoError(t, err)

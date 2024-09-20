@@ -3,6 +3,10 @@ package models
 type DingTalkNotificationResponse struct {
 	ErrorMessage string `json:"errmsg"`
 	ErrorCode    int    `json:"errcode"`
+
+	// lark response fields
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 type DingTalkNotification struct {
@@ -63,5 +67,22 @@ type WeChatNotification struct {
 }
 
 type WeChatNotificationMarkdown struct {
+	Content string `json:"content"`
+}
+
+// //////// lark ////////////
+// https://open.larksuite.com/document/client-docs/bot-v3/add-custom-bot
+type LarkNotification struct {
+	MessageType string                  `json:"msg_type"`
+	Card        LarkNotificationCard    `json:"card"`
+	At          *DingTalkNotificationAt `json:"at,omitempty"`
+}
+
+type LarkNotificationCard struct {
+	Elements []LarkNotificationElement `json:"elements"`
+}
+
+type LarkNotificationElement struct {
+	Tag     string `json:"tag"`
 	Content string `json:"content"`
 }
