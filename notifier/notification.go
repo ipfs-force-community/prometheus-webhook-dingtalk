@@ -89,13 +89,22 @@ func (r *DingNotificationBuilder) Build(m *models.WebhookMessage) (*models.DingT
 }
 
 func (r *DingNotificationBuilder) BuildWeChat(m *models.WebhookMessage) (*models.WeChatNotification, error) {
-	if r.target.Mention != nil {
-		m.AtMobiles = append(m.AtMobiles, r.target.Mention.Mobiles...)
-	}
-
 	content, err := r.renderText(m)
 	if err != nil {
 		return nil, err
+	}
+
+	// Build mention
+	if r.target.Mention != nil {
+		if r.target.Mention.All {
+			content = fmt.Sprintf("%s\n%s ", content, "<@all>")
+		} else {
+			var m string
+			for _, mobile := range r.target.Mention.Mobiles {
+				m += fmt.Sprintf("<@%s>  ", mobile)
+			}
+			content = fmt.Sprintf("%s\n%s", content, m)
+		}
 	}
 
 	notification := &models.WeChatNotification{
@@ -105,25 +114,26 @@ func (r *DingNotificationBuilder) BuildWeChat(m *models.WebhookMessage) (*models
 		},
 	}
 
-	// Build mention
-	if r.target.Mention != nil {
-		notification.At = &models.DingTalkNotificationAt{
-			IsAtAll:   r.target.Mention.All,
-			AtMobiles: r.target.Mention.Mobiles,
-		}
-	}
-
 	return notification, nil
 }
 
 func (r *DingNotificationBuilder) BuildLark(m *models.WebhookMessage) (*models.LarkNotification, error) {
-	if r.target.Mention != nil {
-		m.AtMobiles = append(m.AtMobiles, r.target.Mention.Mobiles...)
-	}
-
 	content, err := r.renderText(m)
 	if err != nil {
 		return nil, err
+	}
+
+	// Build mention
+	if r.target.Mention != nil {
+		if r.target.Mention.All {
+			content = fmt.Sprintf("%s\n%s ", content, "<at id=all></at>")
+		} else {
+			var m string
+			for _, mobile := range r.target.Mention.Mobiles {
+				m += fmt.Sprintf("<at id=%s></at>  ", mobile)
+			}
+			content = fmt.Sprintf("%s %s", content, m)
+		}
 	}
 
 	notification := &models.LarkNotification{
@@ -136,14 +146,6 @@ func (r *DingNotificationBuilder) BuildLark(m *models.WebhookMessage) (*models.L
 				},
 			},
 		},
-	}
-
-	// Build mention
-	if r.target.Mention != nil {
-		notification.At = &models.DingTalkNotificationAt{
-			IsAtAll:   r.target.Mention.All,
-			AtMobiles: r.target.Mention.Mobiles,
-		}
 	}
 
 	return notification, nil
