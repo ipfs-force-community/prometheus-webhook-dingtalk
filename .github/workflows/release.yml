@@ -52,7 +52,7 @@ jobs:
   
     - name: shasum
       if: startsWith(github.ref, 'refs/tags/')
-      run: shasum -a 256 ./dingtalk_${{steps.vars.outputs.tag}}_ubuntu.tar.gz > ./dingtalk_ubuntu.sha256
+      run: shasum -a 256 ./dingtalk_${{steps.vars.outputs.tag}}_ubuntu.tar.gz > ./dingtalk_${{steps.vars.outputs.tag}}_ubuntu.sha256
       shell: bash
   
     - name: Release
